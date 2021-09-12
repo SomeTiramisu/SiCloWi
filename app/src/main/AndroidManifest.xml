@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="org.custro.siclowi">
+
+    <application>
+        <receiver
+            android:name=".AnalogAppWidgetProvider"
+            android:exported="true"
+            android:label="@string/analog_gadget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.oldName"
+                android:value="org.custro.siclowi.AnalogAppWidgetProvider" />
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/analog_appwidget" />
+        </receiver>
+
+        <receiver
+            android:name=".DigitalAppWidgetProvider"
+            android:exported="true"
+            android:label="@string/digital_gadget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.app.action.NEXT_ALARM_CLOCK_CHANGED" />
+                <action android:name="android.intent.action.DATE_CHANGED" />
+                <action android:name="android.intent.action.LOCALE_CHANGED" />
+                <action android:name="android.intent.action.SCREEN_ON" />
+                <action android:name="android.intent.action.TIME_SET" />
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+                <action android:name="org.custro.siclowi.ALARM_CHANGED" />
+                <action android:name="org.custro.siclowi.ON_DAY_CHANGE" />
+                <action android:name="org.custro.siclowi.WORLD_CITIES_CHANGED" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/digital_appwidget" />
+        </receiver>
+
+    </application>
+
+
+</manifest>
