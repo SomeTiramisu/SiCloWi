@@ -17,14 +17,8 @@
 <!-- These resources are around just to allow their values to be customized
      for different hardware and product builds. -->
 <resources>
-    <dimen name="time_margin_top">32dip</dimen>
-
-    <dimen name="timer_setup_delete_margin">19sp</dimen>
-    <dimen name="timer_setup_digit_font_size">46sp</dimen>
 
     <!-- Size of margin for circles. -->
-    <dimen name="circle_margin_top">0dp</dimen>
-    <dimen name="analog_clock_margin">48dp</dimen>
 
     <!-- The maximum size of the font for the time in widgets. -->
     <dimen name="widget_max_clock_font_size">100dp</dimen>

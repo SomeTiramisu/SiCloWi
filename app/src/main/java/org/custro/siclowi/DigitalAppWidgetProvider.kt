@@ -17,31 +17,16 @@ package org.custro.siclowi
 
 import android.annotation.SuppressLint
 import android.app.AlarmManager
-import android.app.AlarmManager.ACTION_NEXT_ALARM_CLOCK_CHANGED
-import android.app.PendingIntent
-import android.app.PendingIntent.FLAG_NO_CREATE
-import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.appwidget.AppWidgetManager
-import android.appwidget.AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT
-import android.appwidget.AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH
-import android.appwidget.AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT
-import android.appwidget.AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH
+import android.appwidget.AppWidgetManager.*
 import android.appwidget.AppWidgetProvider
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.content.Intent.ACTION_DATE_CHANGED
-import android.content.Intent.ACTION_LOCALE_CHANGED
-import android.content.Intent.ACTION_SCREEN_ON
-import android.content.Intent.ACTION_TIMEZONE_CHANGED
-import android.content.Intent.ACTION_TIME_CHANGED
 import android.content.res.Resources
 import android.graphics.Bitmap
-import android.net.Uri
 import android.os.Bundle
-import android.text.TextUtils
 import android.text.format.DateFormat
-import android.util.ArraySet
 import android.util.TypedValue.COMPLEX_UNIT_PX
 import android.view.LayoutInflater
 import android.view.View
@@ -51,11 +36,7 @@ import android.view.View.VISIBLE
 import android.widget.RemoteViews
 import android.widget.TextClock
 import android.widget.TextView
-
-import java.util.Calendar
-import java.util.Date
-import java.util.Locale
-import java.util.TimeZone
+import java.util.*
 
 /**
  * This provider produces a widget resembling one of the formats below.

@@ -18,9 +18,7 @@
 values can be used elsewhere in clock layouts. -->
 <resources>
     <!-- Lollipop and later normal floating action button margin. -->
-    <dimen name="fab_margin">16dp</dimen>
 
     <!-- Lollipop and later normal floating action button container height. -->
-    <dimen name="fab_height">88dp</dimen>
 
 </resources>

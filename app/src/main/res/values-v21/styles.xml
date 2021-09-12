@@ -17,18 +17,4 @@
 
 <resources>
 
-    <style name="body">
-        <item name="android:textSize">14sp</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="android:fontFamily">sans-serif-medium</item>
-    </style>
-
-    <style name="PrimaryLabelTextAppearance" parent="PrimaryLabelTextParentAppearance">
-        <item name="android:fontFamily">sans-serif-medium</item>
-    </style>
-
-    <style name="SecondaryLabelTextAppearance" parent="SecondaryLabelTextParentAppearance">
-        <item name="android:fontFamily">sans-serif-medium</item>
-    </style>
-
 </resources>
