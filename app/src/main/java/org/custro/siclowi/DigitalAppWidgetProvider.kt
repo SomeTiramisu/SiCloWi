@@ -16,38 +16,34 @@
 package org.custro.siclowi
 
 import android.annotation.SuppressLint
-import android.app.AlarmManager
+import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetManager.*
 import android.appwidget.AppWidgetProvider
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.provider.AlarmClock.ACTION_SHOW_ALARMS
 import android.text.format.DateFormat
+import android.util.Log
 import android.util.TypedValue.COMPLEX_UNIT_PX
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
 import android.view.View.MeasureSpec.UNSPECIFIED
-import android.view.View.VISIBLE
 import android.widget.RemoteViews
 import android.widget.TextClock
 import android.widget.TextView
+import androidx.core.content.ContextCompat.startActivity
 import java.util.*
+import kotlin.math.max
+import kotlin.math.roundToInt
 
 /**
  * This provider produces a widget resembling one of the formats below.
  *
- * If an alarm is scheduled to ring in the future:
- * <pre>
- *      12:59 AM
- *      WED, FEB 3 ⏰ THU 9:30 AM
- * </pre>
- *
- * If no alarm is scheduled to ring in the future:
  * <pre>
  *      12:59 AM
  *      WED, FEB 3
@@ -58,18 +54,6 @@ import java.util.*
  * choose optimal values.
  */
 class DigitalAppWidgetProvider : AppWidgetProvider() {
-    override fun onReceive(context: Context, intent: Intent) {
-        LOGGER.i("onReceive: $intent")
-        super.onReceive(context, intent)
-
-        val wm: AppWidgetManager = AppWidgetManager.getInstance(context) ?: return
-
-        val provider = ComponentName(context, javaClass)
-        val widgetIds: IntArray = wm.getAppWidgetIds(provider)
-        //val dm = DataModel.dataModel
-        //dm.updateWidgetCount(javaClass, widgetIds.size, R.string.category_digital_widget)
-    }
-
     /**
      * Called when widgets must provide remote views.
      */
@@ -93,7 +77,7 @@ class DigitalAppWidgetProvider : AppWidgetProvider() {
         super.onAppWidgetOptionsChanged(context, wm, widgetId, options)
 
         // Scale the fonts of the clock to fit inside the new size
-        relayoutWidget(context, AppWidgetManager.getInstance(context), widgetId, options)
+        relayoutWidget(context, getInstance(context), widgetId, options)
     }
 
 
@@ -127,16 +111,10 @@ class DigitalAppWidgetProvider : AppWidgetProvider() {
             get() = mClockFontSizePx
             set(clockFontSizePx) {
                 mClockFontSizePx = clockFontSizePx
-                mFontSizePx = Math.max(1, Math.round(clockFontSizePx / 7.5f))
+                mFontSizePx = max(1, (clockFontSizePx / 7.5f).roundToInt())
                 mIconFontSizePx = (mFontSizePx * 1.4f).toInt()
                 mIconPaddingPx = mFontSizePx / 3
             }
-
-        /**
-         * @return the amount of widget height available to the world cities list
-         */
-        val listHeight: Int
-            get() = mTargetHeightPx - mMeasuredHeightPx
 
         fun hasViolations(): Boolean {
             return mMeasuredWidthPx > mTargetWidthPx || mMeasuredHeightPx > mTargetHeightPx
@@ -177,16 +155,6 @@ class DigitalAppWidgetProvider : AppWidgetProvider() {
         private val LOGGER = LogUtils.Logger("DigitalWidgetProvider")
 
         /**
-         * Intent action used for refreshing a world city display when any of them changes days or when
-         * the default TimeZone changes days. This affects the widget display because the day-of-week is
-         * only visible when the world city day-of-week differs from the default TimeZone's day-of-week.
-         */
-        private const val ACTION_ON_DAY_CHANGE = "org.custro.siclowi.ON_DAY_CHANGE"
-
-        /** Intent used to deliver the [.ACTION_ON_DAY_CHANGE] callback.  */
-        private val DAY_CHANGE_INTENT: Intent = Intent(ACTION_ON_DAY_CHANGE)
-
-        /**
          * Compute optimal font and icon sizes offscreen for both portrait and landscape orientations
          * using the last known widget size and apply them to the widget.
          */
@@ -200,7 +168,6 @@ class DigitalAppWidgetProvider : AppWidgetProvider() {
             val landscape: RemoteViews = relayoutWidget(context, wm, widgetId, options, false)
             val widget = RemoteViews(landscape, portrait)
             wm.updateAppWidget(widgetId, widget)
-            //wm.notifyAppWidgetViewDataChanged(widgetId, R.id.world_city_list)
         }
 
         /**
@@ -214,14 +181,14 @@ class DigitalAppWidgetProvider : AppWidgetProvider() {
             portrait: Boolean
         ): RemoteViews {
             // Create a remote view for the digital clock.
-            val packageName: String = context.getPackageName()
+            val packageName: String = context.packageName
             val rv = RemoteViews(packageName, R.layout.digital_widget)
 
             // Tapping on the widget opens the app (if not on the lock screen).
             if (WidgetUtils.isWidgetClickable(wm, widgetId)) {
-                //val openApp = Intent(context, DeskClock::class.java)
-                //val pi: PendingIntent = PendingIntent.getActivity(context, 0, openApp, 0)
-                //rv.setOnClickPendingIntent(R.id.digital_widget, pi)
+                val openApp = Intent(ACTION_SHOW_ALARMS)
+                val pi: PendingIntent = PendingIntent.getActivity(context, 0, openApp, 0)
+                rv.setOnClickPendingIntent(R.id.digital_widget, pi)
             }
 
             // Configure child views of the remote view.
@@ -229,14 +196,11 @@ class DigitalAppWidgetProvider : AppWidgetProvider() {
             rv.setCharSequence(R.id.date, "setFormat12Hour", dateFormat)
             rv.setCharSequence(R.id.date, "setFormat24Hour", dateFormat)
 
-            rv.setViewVisibility(R.id.nextAlarm, GONE)
-            rv.setViewVisibility(R.id.nextAlarmIcon, GONE)
-
             val options = options ?: wm.getAppWidgetOptions(widgetId)
 
             // Fetch the widget size selected by the user.
-            val resources: Resources = context.getResources()
-            val density: Float = resources.getDisplayMetrics().density
+            val resources: Resources = context.resources
+            val density: Float = resources.displayMetrics.density
             val minWidthPx = (density * options.getInt(OPTION_APPWIDGET_MIN_WIDTH)).toInt()
             val minHeightPx = (density * options.getInt(OPTION_APPWIDGET_MIN_HEIGHT)).toInt()
             val maxWidthPx = (density * options.getInt(OPTION_APPWIDGET_MAX_WIDTH)).toInt()
@@ -250,19 +214,15 @@ class DigitalAppWidgetProvider : AppWidgetProvider() {
             val template = Sizes(targetWidthPx, targetHeightPx, largestClockFontSizePx)
 
             // Compute optimal font sizes and icon sizes to fit within the widget bounds.
-            val sizes = optimizeSizes(context, template, null)
+            val sizes = optimizeSizes(context, template)
             if (LOGGER.isVerboseLoggable) {
                 LOGGER.v(sizes.toString())
             }
 
             // Apply the computed sizes to the remote views.
-            rv.setImageViewBitmap(R.id.nextAlarmIcon, sizes.mIconBitmap)
             rv.setTextViewTextSize(R.id.date, COMPLEX_UNIT_PX, sizes.mFontSizePx.toFloat())
-            rv.setTextViewTextSize(R.id.nextAlarm, COMPLEX_UNIT_PX, sizes.mFontSizePx.toFloat())
             rv.setTextViewTextSize(R.id.clock, COMPLEX_UNIT_PX, sizes.mClockFontSizePx.toFloat())
 
-            // Insufficient space; hide the world city list.
-            rv.setViewVisibility(R.id.world_city_list, GONE)
             return rv
         }
 
@@ -272,8 +232,7 @@ class DigitalAppWidgetProvider : AppWidgetProvider() {
          */
         private fun optimizeSizes(
             context: Context,
-            template: Sizes,
-            nextAlarmTime: String?
+            template: Sizes
         ): Sizes {
             // Inflate a test layout to compute sizes at different font sizes.
             val inflater: LayoutInflater = LayoutInflater.from(context)
@@ -283,15 +242,8 @@ class DigitalAppWidgetProvider : AppWidgetProvider() {
             // Configure the date to display the current date string.
             val dateFormat: CharSequence = getDateFormat(context)
             val date: TextClock = sizer.findViewById(R.id.date) as TextClock
-            date.setFormat12Hour(dateFormat)
-            date.setFormat24Hour(dateFormat)
-
-            // Configure the next alarm views to display the next alarm time or be gone.
-            val nextAlarmIcon: TextView = sizer.findViewById(R.id.nextAlarmIcon) as TextView
-            val nextAlarm: TextView = sizer.findViewById(R.id.nextAlarm) as TextView
-            nextAlarm.setVisibility(GONE)
-            nextAlarmIcon.setVisibility(GONE)
-
+            date.format12Hour = dateFormat
+            date.format24Hour = dateFormat
 
             // Measure the widget at the largest possible size.
             var high = measure(template, template.largestClockFontSizePx, sizer)
@@ -322,10 +274,6 @@ class DigitalAppWidgetProvider : AppWidgetProvider() {
             return low
         }
 
-        private fun getAlarmManager(context: Context): AlarmManager {
-            return context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        }
-
         /**
          * Compute all font and icon sizes based on the given `clockFontSize` and apply them to
          * the offscreen `sizer` view. Measure the `sizer` view and return the resulting
@@ -338,18 +286,12 @@ class DigitalAppWidgetProvider : AppWidgetProvider() {
             // Configure the clock to display the widest time string.
             val date: TextClock = sizer.findViewById(R.id.date) as TextClock
             val clock: TextClock = sizer.findViewById(R.id.clock) as TextClock
-            val nextAlarm: TextView = sizer.findViewById(R.id.nextAlarm) as TextView
-            val nextAlarmIcon: TextView = sizer.findViewById(R.id.nextAlarmIcon) as TextView
 
             // Adjust the font sizes.
             measuredSizes.clockFontSizePx = clockFontSize
-            clock.setText(getLongestTimeString(clock))
+            clock.text = getLongestTimeString(clock)
             clock.setTextSize(COMPLEX_UNIT_PX, measuredSizes.mClockFontSizePx.toFloat())
             date.setTextSize(COMPLEX_UNIT_PX, measuredSizes.mFontSizePx.toFloat())
-            nextAlarm.setTextSize(COMPLEX_UNIT_PX, measuredSizes.mFontSizePx.toFloat())
-            nextAlarmIcon.setTextSize(COMPLEX_UNIT_PX, measuredSizes.mIconFontSizePx.toFloat())
-            nextAlarmIcon
-                    .setPadding(measuredSizes.mIconPaddingPx, 0, measuredSizes.mIconPaddingPx, 0)
 
             // Measure and layout the sizer.
             val widthSize: Int = View.MeasureSpec.getSize(measuredSizes.mTargetWidthPx)
@@ -357,18 +299,13 @@ class DigitalAppWidgetProvider : AppWidgetProvider() {
             val widthMeasureSpec: Int = View.MeasureSpec.makeMeasureSpec(widthSize, UNSPECIFIED)
             val heightMeasureSpec: Int = View.MeasureSpec.makeMeasureSpec(heightSize, UNSPECIFIED)
             sizer.measure(widthMeasureSpec, heightMeasureSpec)
-            sizer.layout(0, 0, sizer.getMeasuredWidth(), sizer.getMeasuredHeight())
+            sizer.layout(0, 0, sizer.measuredWidth, sizer.measuredHeight)
 
             // Copy the measurements into the result object.
-            measuredSizes.mMeasuredWidthPx = sizer.getMeasuredWidth()
-            measuredSizes.mMeasuredHeightPx = sizer.getMeasuredHeight()
-            measuredSizes.mMeasuredTextClockWidthPx = clock.getMeasuredWidth()
-            measuredSizes.mMeasuredTextClockHeightPx = clock.getMeasuredHeight()
-
-            // If an alarm icon is required, generate one from the TextView with the special font.
-            if (nextAlarmIcon.getVisibility() == VISIBLE) {
-                measuredSizes.mIconBitmap = WidgetUtils.createBitmap(nextAlarmIcon)
-            }
+            measuredSizes.mMeasuredWidthPx = sizer.measuredWidth
+            measuredSizes.mMeasuredHeightPx = sizer.measuredHeight
+            measuredSizes.mMeasuredTextClockWidthPx = clock.measuredWidth
+            measuredSizes.mMeasuredTextClockHeightPx = clock.measuredHeight
 
             return measuredSizes
         }
@@ -377,10 +314,10 @@ class DigitalAppWidgetProvider : AppWidgetProvider() {
          * @return "11:59" or "23:59" in the current locale
          */
         private fun getLongestTimeString(clock: TextClock): CharSequence {
-            val format: CharSequence = if (clock.is24HourModeEnabled()) {
-                clock.getFormat24Hour()
+            val format: CharSequence = if (clock.is24HourModeEnabled) {
+                clock.format24Hour
             } else {
-                clock.getFormat12Hour()
+                clock.format12Hour
             }
             val longestPMTime = Calendar.getInstance()
             longestPMTime[0, 0, 0, 23] = 59

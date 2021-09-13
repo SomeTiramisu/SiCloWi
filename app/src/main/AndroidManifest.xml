@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="org.custro.siclowi">
 
     <application>
@@ -9,6 +10,7 @@
             android:label="@string/analog_gadget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.intent.action.SHOW_ALARMS" />
             </intent-filter>
 
             <meta-data
@@ -34,6 +36,7 @@
                 <action android:name="org.custro.siclowi.ALARM_CHANGED" />
                 <action android:name="org.custro.siclowi.ON_DAY_CHANGE" />
                 <action android:name="org.custro.siclowi.WORLD_CITIES_CHANGED" />
+                <action android:name="android.intent.action.SHOW_ALARMS" />
             </intent-filter>
             <meta-data
                 android:name="android.appwidget.provider"
@@ -41,6 +44,5 @@
         </receiver>
 
     </application>
-
 
 </manifest>

@@ -6,6 +6,8 @@
         <entry key="app/src/main/res/layout/alarm_activity.xml" value="0.19375" />
         <entry key="app/src/main/res/layout/analog_appwidget.xml" value="0.1" />
         <entry key="app/src/main/res/layout/clock_fragment.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/digital_widget.xml" value="0.1933876811594203" />
+        <entry key="app/src/main/res/layout/loading_widget.xml" value="0.1" />
         <entry key="app/src/main/res/layout/stopwatch_fragment.xml" value="0.19375" />
       </map>
     </option>

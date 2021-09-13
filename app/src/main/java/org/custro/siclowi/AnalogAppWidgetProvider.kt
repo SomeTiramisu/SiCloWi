@@ -15,42 +15,32 @@
  */
 package org.custro.siclowi
 
+import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.provider.AlarmClock
 import android.widget.RemoteViews
 
 /**
  * Simple widget to show an analog clock.
  */
 class AnalogAppWidgetProvider : AppWidgetProvider() {
-    override fun onReceive(context: Context, intent: Intent?) {
-        super.onReceive(context, intent)
-        val wm: AppWidgetManager = AppWidgetManager.getInstance(context) ?: return
-
-        // Send events for newly created/deleted widgets.
-        val provider = ComponentName(context, javaClass)
-        val widgetCount: Int = wm.getAppWidgetIds(provider).size
-        //val dm = DataModel.dataModel
-        //dm.updateWidgetCount(javaClass, widgetCount, R.string.category_analog_widget)
-    }
-
     /**
      * Called when widgets must provide remote views.
      */
     override fun onUpdate(context: Context, wm: AppWidgetManager, widgetIds: IntArray) {
         super.onUpdate(context, wm, widgetIds)
         widgetIds.forEach { widgetId ->
-            val packageName: String = context.getPackageName()
+            val packageName: String = context.packageName
             val widget = RemoteViews(packageName, R.layout.analog_appwidget)
 
             // Tapping on the widget opens the app (if not on the lock screen).
             if (WidgetUtils.isWidgetClickable(wm, widgetId)) {
-                //val openApp = Intent(context, DeskClock::class.java)
-                //val pi: PendingIntent = PendingIntent.getActivity(context, 0, openApp, 0)
-                //widget.setOnClickPendingIntent(R.id.analog_appwidget, pi)
+                val openApp = Intent(AlarmClock.ACTION_SHOW_ALARMS)
+                val pi: PendingIntent = PendingIntent.getActivity(context, 0, openApp, 0)
+                widget.setOnClickPendingIntent(R.id.analog_appwidget, pi)
             }
             wm.updateAppWidget(widgetId, widget)
         }
