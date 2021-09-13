@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="org.custro.siclowi">
 
-    <application>
+    <application
+        android:label="SiCloWi">
         <receiver
             android:name=".AnalogAppWidgetProvider"
             android:exported="true"
@@ -27,15 +28,6 @@
             android:label="@string/digital_gadget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="android.app.action.NEXT_ALARM_CLOCK_CHANGED" />
-                <action android:name="android.intent.action.DATE_CHANGED" />
-                <action android:name="android.intent.action.LOCALE_CHANGED" />
-                <action android:name="android.intent.action.SCREEN_ON" />
-                <action android:name="android.intent.action.TIME_SET" />
-                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
-                <action android:name="org.custro.siclowi.ALARM_CHANGED" />
-                <action android:name="org.custro.siclowi.ON_DAY_CHANGE" />
-                <action android:name="org.custro.siclowi.WORLD_CITIES_CHANGED" />
                 <action android:name="android.intent.action.SHOW_ALARMS" />
             </intent-filter>
             <meta-data
