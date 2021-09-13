@@ -25,5 +25,4 @@
     <!-- Format for describing the date, for accessibility. -->
     <!-- Default clock style. -->
     <!-- ⏰ (A custom font replaces the A glyph with a clock icon) -->
-    <string name="clock_emoji">A</string>
 </resources>
