@@ -23,20 +23,15 @@ import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
-import android.graphics.Bitmap
 import android.os.Bundle
 import android.provider.AlarmClock.ACTION_SHOW_ALARMS
 import android.text.format.DateFormat
-import android.util.Log
 import android.util.TypedValue.COMPLEX_UNIT_PX
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.GONE
 import android.view.View.MeasureSpec.UNSPECIFIED
 import android.widget.RemoteViews
 import android.widget.TextClock
-import android.widget.TextView
-import androidx.core.content.ContextCompat.startActivity
 import java.util.*
 import kotlin.math.max
 import kotlin.math.roundToInt
@@ -91,7 +86,6 @@ class DigitalAppWidgetProvider : AppWidgetProvider() {
         val largestClockFontSizePx: Int
     ) {
         val smallestClockFontSizePx = 1
-        var mIconBitmap: Bitmap? = null
 
         var mMeasuredWidthPx = 0
         var mMeasuredHeightPx = 0
