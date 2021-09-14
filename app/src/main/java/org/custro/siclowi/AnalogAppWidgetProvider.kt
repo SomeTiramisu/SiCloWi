@@ -38,7 +38,8 @@ class AnalogAppWidgetProvider : AppWidgetProvider() {
 
             // Tapping on the widget opens the app (if not on the lock screen).
             if (WidgetUtils.isWidgetClickable(wm, widgetId)) {
-                val openApp = Intent(AlarmClock.ACTION_SHOW_ALARMS)
+                //val openApp = Intent(AlarmClock.ACTION_SHOW_ALARMS)
+                val openApp = context.packageManager.getLaunchIntentForPackage("com.android.deskclock")
                 val pi: PendingIntent = PendingIntent.getActivity(context, 0, openApp, 0)
                 widget.setOnClickPendingIntent(R.id.analog_appwidget, pi)
             }

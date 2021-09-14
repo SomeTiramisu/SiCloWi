@@ -180,7 +180,8 @@ class DigitalAppWidgetProvider : AppWidgetProvider() {
 
             // Tapping on the widget opens the app (if not on the lock screen).
             if (WidgetUtils.isWidgetClickable(wm, widgetId)) {
-                val openApp = Intent(ACTION_SHOW_ALARMS)
+                //val openApp = Intent(ACTION_SHOW_ALARMS)
+                val openApp = context.packageManager.getLaunchIntentForPackage("com.android.deskclock")
                 val pi: PendingIntent = PendingIntent.getActivity(context, 0, openApp, 0)
                 rv.setOnClickPendingIntent(R.id.digital_widget, pi)
             }
