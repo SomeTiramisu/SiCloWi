@@ -18,7 +18,7 @@
 <resources
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2"
     xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_label" translatable="false">SiCloWi</string>
+    <string name="app_label">SiCloWi</string>
     <!-- Message indicating the widget is being loaded. -->
     <string name="loading_widget">Loading\u2026</string>
     <!-- Label for analog clock gadget displayed in the widget picker. [CHAR LIMIT=18] -->
