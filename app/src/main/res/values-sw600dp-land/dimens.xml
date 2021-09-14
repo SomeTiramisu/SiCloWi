@@ -17,9 +17,6 @@
 <!-- These resources are around just to allow their values to be customized
      for different hardware and product builds. -->
 <resources>
-
-    <!-- Size of margin for circles. -->
-
     <!-- The maximum size of the font for the time in widgets. -->
     <dimen name="widget_max_clock_font_size">100dp</dimen>
 </resources>

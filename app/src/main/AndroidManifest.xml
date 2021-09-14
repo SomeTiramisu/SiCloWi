@@ -4,7 +4,7 @@
     package="org.custro.siclowi">
 
     <application
-        android:label="SiCloWi">
+        android:label="@string/app_label">
         <receiver
             android:name=".AnalogAppWidgetProvider"
             android:exported="true"

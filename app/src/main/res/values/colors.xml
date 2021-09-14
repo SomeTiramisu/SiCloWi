@@ -16,9 +16,7 @@
   -->
 
 <resources>
-
     <color name="white">#FFFFFFFF</color>
-
     <!-- shadowColor for widget text -->
     <color name="widget_shadow_color">#67000000</color>
 </resources>

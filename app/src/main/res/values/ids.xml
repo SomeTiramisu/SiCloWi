@@ -16,7 +16,6 @@
 
 <resources>
     <item name="numbers_key" type="id" />
-
     <item name="menu_item_search" type="id" />
     <item name="menu_item_sort" type="id" />
     <item name="menu_item_night_mode" type="id" />

@@ -15,7 +15,6 @@
   ~ limitations under the License
   -->
 <resources>
-
     <declare-styleable name="CircleView">
         <!-- Sets the center/radius of the circle relative to the view's bounds. -->
         <attr name="android:gravity" />
@@ -28,5 +27,4 @@
         <!-- The radius of the circle. -->
         <attr name="radius" format="dimension" />
     </declare-styleable>
-
 </resources>

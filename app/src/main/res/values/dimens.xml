@@ -18,49 +18,15 @@
 <!-- These resources are around just to allow their values to be customized
      for different hardware and product builds. -->
 <resources>
-
-    <!-- Analog clock size in the the screen saver -->
-
     <dimen name="big_font_size">32sp</dimen>
     <dimen name="label_font_size">16sp</dimen>
-
-    <!--margin should be ~ half timer_setup_font_size -->
-
-    <!-- Specified in sp to match the top margin of the time on the adjacent world clock tab. -->
-
-    <!-- Size of margin for circles. -->
-
-    <!-- Size of time zone analog clocks in world clock. -->
-
     <dimen name="min_analog_widget_size">110dp</dimen>
-
     <!-- digital widget sizing information -->
     <dimen name="min_digital_widget_width">206dp</dimen>
     <dimen name="min_digital_widget_height">129dp</dimen>
-
-    <!-- The fixed size of the font for the city name / day of week in the city widget. -->
     <!-- The maximum size of the font for the time in widgets. -->
     <dimen name="widget_max_clock_font_size">88dp</dimen>
-
     <!-- shadow styles for widget text with drop shadows -->
     <item name="widget_shadow_radius" format="float" type="dimen">2.75</item>
     <item name="widget_shadow_dy" format="float" type="dimen">2.0</item>
-
-    <!-- Divider height -->
-
-    <!-- Divider side padding -->
-
-    <!-- The minimum height/width of any touch target -->
-
-    <!-- Dimens for drawable padding on Alarms tab -->
-
-    <!-- Dimens for icon padding on Alarms tab -->
-
-    <!-- Padding between checkbox and text. -->
-
-    <!-- Kitkat and later floating action button elevation. -->
-
-    <!-- KitKat floating action button margin; see -v21 folder for newer platforms. -->
-
-    <!-- KitKat floating action button container height; see -v21 folder for newer platforms. -->
 </resources>

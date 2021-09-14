@@ -18,7 +18,6 @@
      for different hardware and product builds. -->
 <resources>
     <dimen name="big_font_size">152sp</dimen>
-
     <!-- The maximum size of the font for the time in widgets. -->
     <dimen name="widget_max_clock_font_size">138dp</dimen>
 </resources>
